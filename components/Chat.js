@@ -3,7 +3,7 @@
 import React from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
-import { createStackNavigator } from "@react-navigation/stack";
+// import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase/compat";
 import "firebase/compat/firestore";
 
@@ -77,6 +77,18 @@ export default class Chat extends React.Component {
     });
   }
 
+  onSend(messages = []) {
+    this.setState(
+      (previousState) => ({
+        messages: GiftedChat.append(previousState.messages, messages),
+      }),
+      () => {
+        this.addMessages();
+        this.saveMessages();
+      }
+    );
+  }
+
   componentWillUnmount() {
     // stop listening for changes
     this.unsubscribe();
@@ -112,18 +124,6 @@ export default class Chat extends React.Component {
       createdAt: message.createdAt,
       user: this.state.user,
     });
-  }
-
-  onSend(messages = []) {
-    this.setState(
-      (previousState) => ({
-        messages: GiftedChat.append(previousState.messages, messages),
-      }),
-      () => {
-        this.addMessages();
-        this.saveMessages();
-      }
-    );
   }
 
   render() {
