@@ -3,6 +3,7 @@
 import React from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
+import { createStackNavigator } from "@react-navigation/stack";
 
 export default class Chat extends React.Component {
   constructor() {
