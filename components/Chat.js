@@ -3,9 +3,11 @@
 import React from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
-// import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase/compat";
 import "firebase/compat/firestore";
+import AsyncStorage from "@react-native-community/async-storage";
+import NetInfo from "@react-native-community/netinfo";
 
 export default class Chat extends React.Component {
   constructor() {
@@ -43,12 +45,57 @@ export default class Chat extends React.Component {
     this.refMsgsUser = null;
   }
 
+  // save messages
+  async saveMessages() {
+    try {
+      await AsyncStorage.setItem(
+        "messages",
+        JSON.stringify(this.state.messages)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  // get messages
+  async getMessages() {
+    let messages = "";
+    try {
+      messages = (await AsyncStorage.getItem("messages")) || [];
+      this.setState({
+        messages: JSON.parse(messages),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  // delete messages
+  async deleteMessages() {
+    try {
+      await AsyncStorage.removeItem("messages");
+      this.setState({
+        messages: [],
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   // creates the initial welcome message and the system message when component did mount
   componentDidMount() {
     let { name } = this.props.route.params;
     this.props.navigation.setOptions({ title: name });
 
-    this.referenceChatMessages = firebase.firestore().collection("messages");
+    NetInfo.fetch().then((connection) => {
+      if (connection.isConnected) {
+        console.log("online");
+      } else {
+        console.log("offline");
+      }
+    });
+
+    // this.referenceChatMessages = firebase.firestore().collection("messages");
 
     // listens for updates in the collection
     this.unsubscribe = this.referenceChatMessages
@@ -75,6 +122,7 @@ export default class Chat extends React.Component {
         .collection("messages")
         .where("uid", "==", this.state.uid);
     });
+    this.getMessages();
   }
 
   onSend(messages = []) {
@@ -83,7 +131,6 @@ export default class Chat extends React.Component {
         messages: GiftedChat.append(previousState.messages, messages),
       }),
       () => {
-        this.addMessages();
         this.saveMessages();
       }
     );
@@ -92,6 +139,13 @@ export default class Chat extends React.Component {
   componentWillUnmount() {
     // stop listening for changes
     this.unsubscribe();
+  }
+
+  renderInputToolbar(props) {
+    if (this.state.isConnected == false) {
+    } else {
+      return <InputToolbar {...props} />;
+    }
   }
 
   /* retrieves the current data in "messages" collection and 
