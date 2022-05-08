@@ -1,14 +1,13 @@
-// import * as firebase from "firebase";
-// import "firebase/firestore";
 import React from "react";
-import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
-// import AsyncStorage from "@react-native-community/async-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-
-// import * as firebase from "firebase/compat";
-// import "firebase/firestore";
+import CustomActions from "./CustomActions";
+import MapView from "react-native-maps";
+// import * as Permissions from "expo-permissions";
+// import * as ImagePicker from "expo-image-picker";
+// import * as Location from "expo-location";
 
 const firebase = require("firebase");
 require("firebase/firestore");
@@ -25,6 +24,8 @@ export default class Chat extends React.Component {
         avatar: "",
       },
       isConnected: false,
+      image: null,
+      location: null,
     };
 
     // SDK from Firestore
@@ -221,13 +222,36 @@ export default class Chat extends React.Component {
     }
   }
 
+  renderCustomActions(props) {
+    return <CustomActions {...props} />;
+  }
+
+  //custom map view
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   // customizes system messages
   renderSystemMessage(props) {
     return (
       <SystemMessage
         {...props}
         textStyle={{
-          color: "#57402f",
+          color: "#2f574e",
         }}
       />
     );

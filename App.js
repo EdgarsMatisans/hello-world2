@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-// importing screens we want to navigate between
 import Start from "./components/Start";
 import Chat from "./components/Chat";
 
