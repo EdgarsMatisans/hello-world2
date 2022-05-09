@@ -8,7 +8,9 @@ Chat screen provides options of sending messages, location and images whilst onl
 Messages can be viewed offline also
 # Technologies
 React Native
+
 Expo
+
 Firebase
 Gifted Chat
 Progressive Web Apps (PWA)
