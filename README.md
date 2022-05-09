@@ -12,15 +12,22 @@ React Native
 Expo
 
 Firebase
+
 Gifted Chat
+
 Progressive Web Apps (PWA)
+
 # Installation
 # Requirements
 Node.js
+
 npm
+
 Android Studio or other Emulator of choice
+
 Expo or Expo Go
-Steps
+
+# Steps
 in teminal go to root directory and run npm install to install dependecies
 then run expo start or npm start
 scan QR code presented by device or run on emulator by pressing a in terminal
