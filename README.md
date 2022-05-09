@@ -6,14 +6,14 @@ With this App you can log in with name, enter chat page, send messages ,location
 User will be presented with Start page where name is entered and background color may be selected
 Chat screen provides options of sending messages, location and images whilst online
 Messages can be viewed offline also
-Technologies
+# Technologies
 React Native
 Expo
 Firebase
 Gifted Chat
 Progressive Web Apps (PWA)
-Installation
-Requirements
+# Installation
+# Requirements
 Node.js
 npm
 Android Studio or other Emulator of choice
